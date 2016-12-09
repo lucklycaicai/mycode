@@ -10,6 +10,5 @@ public class TestController {
 	@RequestMapping(value="good.do")
 	public String aaa(){
 		return "index.html";
-		
 	}
 }
