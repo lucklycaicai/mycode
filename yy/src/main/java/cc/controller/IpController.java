@@ -26,11 +26,12 @@ import com.alibaba.fastjson.JSONObject;
 @Controller
 public class IpController {
 	String address = "null";
-	
+	String path = "";
+	String ipconfig = "";
 	@Autowired
 	LogMapper logMapper;
 	
-	 public void printLog(String data,String path)
+	 public void printLog(String data)
 	    {
 		 
 		 FileWriter fw = null;
@@ -66,7 +67,7 @@ public class IpController {
 	public String getIp(HttpServletRequest request){
 		  System.out.println("=========into========");
 		  System.out.println("path:"+request.getSession().getServletContext().getRealPath("/"));
-		  String path = request.getSession().getServletContext().getRealPath("/");
+		  path = request.getSession().getServletContext().getRealPath("/");
 		  
 		  String ip = request.getHeader("x-forwarded-for");     
 	      if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {     
@@ -78,7 +79,7 @@ public class IpController {
 	      if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {     
 	          ip = request.getRemoteAddr();     
 	      }     
-	     
+	      ipconfig = ip;
 	     
 	      /*System.out.println("ip1:"+request.getHeader("Proxy-Client-IP"));
 	      System.out.println("ip2:"+request.getHeader("WL-Proxy-Client-IP")); 
@@ -88,6 +89,10 @@ public class IpController {
 	      String ip2 = request.getHeader("WL-Proxy-Client-IP");
 	      String ip3 = request.getRemoteAddr();
 	      String str = "ip1:"+ip1+"   ip2:"+ip2+"  ip3:"+ip3+"   ip:"+ip+"   ";
+	      Map param = new HashMap();
+	      param.put("time",new Date());
+	      param.put("text",str);
+	      logMapper.insert(param);
 		  get(ip,str);
 		  System.out.println("=========end========");
 		  return "index.html?ip="+address;
@@ -96,7 +101,7 @@ public class IpController {
 		try  {     
 			 SimpleDateFormat s = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			  String time = s.format(new Date());
-			strIP = "58.40.17.82";
+			//strIP = "58.40.17.82";
 			URL url = new URL( "http://ip.taobao.com/service/getIpInfo.php?ip=" + strIP);
 			URLConnection conn = url.openConnection();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "GBK"));
@@ -115,9 +120,11 @@ public class IpController {
 			Map param = new HashMap();
 			param.put("time", new Date());
 			param.put("text", str+text);
+			//printLog(str+text);
+			logMapper.insert(param);
 		}   
 		catch( IOException e)   { 
-			e.printStackTrace();
+			
 		} 
 		
 	} 
