@@ -37,7 +37,7 @@
      </bean>  
        
      <!-- <mvc:interceptors>  
-         <mvc:interceptor>  
+         <mvc:interceptor>   
              某一模块的拦截：/myPath/**, 拦截所有的请求/**  
              <mvc:mapping path="/**"/>  
              <bean class="cn.itcast.springmvc.interceptor.MyIntercepor"></bean>  
